@@ -2,13 +2,11 @@ package nbt
 
 import (
 	"bytes"
-	"errors"
 	"io"
 	"math"
 	"reflect"
 	"strings"
 	"sync"
-	"unicode/utf8"
 )
 
 // Encoder writes NBT objects to an NBT output stream.
@@ -196,9 +194,6 @@ func (e *Encoder) encode(val reflect.Value, tagName string) error {
 
 	case reflect.String:
 		s := val.String()
-		if !utf8.ValidString(s) {
-			return InvalidStringError{Off: e.w.off, String: s, Err: errors.New("string does not exist out of utf8 only")}
-		}
 		return e.Encoding.WriteString(e.w, s)
 
 	case reflect.Slice:
